@@ -1,5 +1,7 @@
 module MetabolicSim
 
-# Write your package code here.
+    function Hi()
+        print("Hi")
+    end
 
 end

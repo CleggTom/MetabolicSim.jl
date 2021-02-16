@@ -1,0 +1,13 @@
+name = "MetabolicSim"
+uuid = "18f8df61-9062-4a1b-a3bc-52a90cb28c8d"
+authors = ["Tom <t.clegg17@imperial.ac.uk> and contributors"]
+version = "0.1.0"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]

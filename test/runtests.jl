@@ -1,6 +1,2 @@
-using MetabolicSim
-using Test
-
-@testset "MetabolicSim.jl" begin
-    # Write your tests here.
-end
+using SafeTestsets
+@safetestset "parameter_tests" begin include("parameter_tests.jl") end

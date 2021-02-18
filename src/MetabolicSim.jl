@@ -2,10 +2,10 @@ module MetabolicSim
 
     import DiffEqBase, OrdinaryDiffEq, DiffEqCallbacks
 
-    include("parameters/Parameters.jl")
+    include("parameters/parameters.jl")
     include("simulation/assembly//assembly.jl")
     include("simulation/dxdt.jl")
-    include("simulation/Simulate.jl")
+    include("simulation/simulate.jl")
     include("analysis/analysis.jl")
     
     export make_parameters

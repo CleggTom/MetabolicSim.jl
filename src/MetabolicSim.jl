@@ -8,7 +8,7 @@ module MetabolicSim
     include("simulation/Simulate.jl")
     include("analysis/analysis.jl")
     
-    export Parameters, make_parameters
+    export make_parameters
     export add_at_equilibrium, add_at_t
     export simulate
     export get_timeseries, get_Nsp

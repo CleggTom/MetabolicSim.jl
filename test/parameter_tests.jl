@@ -27,6 +27,6 @@ end
     @test isequal(p_1,p_2)
 
     #test make_parameters assertion error for leakage
-    l = [0.5 0.0 ; 0.6 0.2]
+    l = ones(M,M)
    @test_throws AssertionError MetabolicSim.make_parameters(N,M,u,Rm,l,ρ)
 end

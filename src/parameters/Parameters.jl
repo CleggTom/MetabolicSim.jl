@@ -32,6 +32,7 @@ object. Also does checks internally to make sure the values are correct.
 """
 function make_parameters(N::Int64, M::Int64, u::Array{Float64,2}, Rm::Vector{Float64}, l::Array{Float64,2}, ρ::Vector{Float64})
     #assert parameters are the right size
+    @assert all([N,M] .> 0) "Number of consumers and resources must both be greater than 0"
     @assert size(u) == (N,M) "Uptake array is the wrong size"
     @assert length(Rm) == N "Rm vector is the wrong length"
     @assert size(l) == (M,M) "Leakage array is the wrong size"

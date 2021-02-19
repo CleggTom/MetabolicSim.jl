@@ -1,4 +1,5 @@
 using SafeTestsets
 
-@safetestset "parameter_tests" begin include("parameter_tests.jl") end
-@safetestset "simulation_tests" begin include("simulation_tests.jl") end
+@safetestset "parameter tests:" begin include("parameter_tests.jl") end
+@safetestset "simulation tests:" begin include("simulation_tests.jl") end
+@safetestset "assembly tests:" begin include("assembly_tests.jl") end

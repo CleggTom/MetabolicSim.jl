@@ -1,3 +1,19 @@
+#fucntion to get argument names
+function method_argnames(m::Method)
+    argnames = ccall(:jl_uncompress_argnames, Vector{Symbol}, (Any,), m.slot_syms)
+    isempty(argnames) && return argnames
+    return argnames[1:m.nargs]
+end
+
+function assert_assembly_callbacks(biomass_func::Function, new_parameters::Function)
+ #assert functions have correct args and return types
+ @assert Base.return_types(biomass_func)[1] == Float64 "`biomass_func` must return biomass of new consumer as a Float64)"
+ @assert method_argnames(collect(methods(biomass_func))[1]) == [Symbol("#self#"), :integrator] "`biomass_func` must take only `integrator` as argument"
+
+ @assert Base.return_types(new_parameters)[1] == Tuple{Any,Float64} "`new_parameters` must return biomass of new uptake matrix and maintenance cost as a `Tuple{Any,Float64}`"
+ @assert method_argnames(collect(methods(new_parameters))[1]) == [Symbol("#self#"), :integrator] "`new_parameters` must take only `integrator` as argument"
+end
+
 #default callback functions
 function biomass_func_default(integrator)
     return(rand())
@@ -52,13 +68,27 @@ function consumer_equilibrium(integrator, tmax::Float64, abstol::Float64, reltol
     end
 end
 
-function add_at_equilibrium(biomass_func::Function, new_parameters::Function, tmax::Float64 = Inf; abstol::Float64 = 1e-8, reltol::Float64 = 1e-6)
+function add_at_equilibrium(biomass_func::Function, new_parameters::Function; tmax::Float64 = Inf, abstol::Float64 = 1e-8, reltol::Float64 = 1e-6)
+    #warn if tolerances are high
+    if abstol > 1e-5
+        @warn "abstol is set greater than `1e-5` (`$abstol`). Are you sure you dont want tighter tolerances?"
+    elseif reltol > 1e-5
+        @warn "reltol is set greater than `1e-5` (`$reltol`). Are you sure you dont want tighter tolerances?"
+    end
+
+    #assert functions have correct args and return types
+    assert_assembly_callbacks(biomass_func, new_parameters)
+
+    #define condtion and affect!
     condition = (u, t, integrator) -> consumer_equilibrium(integrator, tmax, abstol, reltol)
     affect! = (integrator) -> add_consumer!(integrator, biomass_func, new_parameters)
     return(:equilibrium , DiffEqCallbacks.DiscreteCallback(condition, affect!; save_positions = (true, false)))
 end
 
 function add_at_t(biomass_func::Function, new_parameters::Function, times::Vector{Float64})
+    #assert functions have correct args and return types
+    assert_assembly_callbacks(biomass_func, new_parameters)
+
     affect! = (integrator) -> add_consumer!(integrator, biomass_func, new_parameters)
     return(:at_time_stop, DiffEqCallbacks.PresetTimeCallback(times, affect!), times)
 end

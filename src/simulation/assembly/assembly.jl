@@ -6,12 +6,12 @@ function method_argnames(m::Method)
 end
 
 function assert_assembly_callbacks(biomass_func::Function, new_parameters::Function)
- #assert functions have correct args and return types
- @assert Base.return_types(biomass_func)[1] == Float64 "`biomass_func` must return biomass of new consumer as a Float64)"
- @assert method_argnames(collect(methods(biomass_func))[1]) == [Symbol("#self#"), :integrator] "`biomass_func` must take only `integrator` as argument"
+    #assert functions have correct args and return types
+    @assert Base.return_types(biomass_func)[1] == Float64 "`biomass_func` must return biomass of new consumer as a Float64)"
+    @assert method_argnames(collect(methods(biomass_func))[1]) == [Symbol("#self#"), :integrator] "`biomass_func` must take only `integrator` as argument"
 
- @assert Base.return_types(new_parameters)[1] == Tuple{Any,Float64} "`new_parameters` must return biomass of new uptake matrix and maintenance cost as a `Tuple{Any,Float64}`"
- @assert method_argnames(collect(methods(new_parameters))[1]) == [Symbol("#self#"), :integrator] "`new_parameters` must take only `integrator` as argument"
+    @assert Base.return_types(new_parameters)[1] == Tuple{Any,Float64} "`new_parameters` must return biomass of new uptake matrix and maintenance cost as a `Tuple{Any,Float64}`"
+    @assert method_argnames(collect(methods(new_parameters))[1]) == [Symbol("#self#"), :integrator] "`new_parameters` must take only `integrator` as argument"
 end
 
 #default callback functions

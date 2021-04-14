@@ -20,10 +20,10 @@ function dx!(dx,x,p::Parameters,t)
 
  #loop over metabolites j = 1 : M
   for j = 1:p.M
-    dx[p.N + j] = p.ρ[j] # inflow
+    dx[p.N + j] = p.ρ[j] - (p.ω[j] * x[p.N + j]) #inflow
     #loop over species
     for i = 1:p.N
-      dx[p.N + j] += -p.u[i,j] * x[i] * x[p.N + j] # -uptake
+      dx[p.N + j] += -p.u[i,j] * x[i] * x[p.N + j] #minus uptake
       #loop over other metabolites
       for k = 1:p.M
         dx[p.N + j] += p.u[i,k] * x[i] * x[p.N + k] * p.l[k,j] # +leakage

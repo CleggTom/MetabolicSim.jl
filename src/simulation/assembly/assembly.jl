@@ -14,16 +14,6 @@ function assert_assembly_callbacks(biomass_func::Function, new_parameters::Funct
     @assert method_argnames(collect(methods(new_parameters))[1]) == [Symbol("#self#"), :integrator] "`new_parameters` must take only `integrator` as argument"
 end
 
-#default callback functions
-function biomass_func_default(integrator)
-    return( 0.5 )
-end
-
-function new_parameters_default(integrator)
-    u = zeros(integrator.p.M)
-    u[rand(1:integrator.p.M)] = rand()
-    return( 0.5 , u )
-end
 
 """
     add_consumer!(integrator, biomass_func::Function, new_parameters::Function)

@@ -16,3 +16,7 @@ function get_Nsp(sol, abstol::Float64 = 1e-10)
     return(mapslices(x -> sum(x .> abstol), series[: , 1:sol.prob.p.N], dims = 2)) 
 end
 
+#respiration callback
+function save_func(u, t, integrator)
+    integrator.p.Rm .* integrator.u[(integrator.p.M+1 : end)]
+end

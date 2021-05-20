@@ -10,24 +10,27 @@ Dynamics occur as described by the set of equations:
 
 """
 function dx!(dx,x,p::Parameters,t)
+  #loop over consumers i = 1:N
   for i = 1:p.N
-    dx[i] = -x[i] * p.Rm[i] # - Rm
+    dx[p.M + i] = -x[p.M + i] * p.Rm[i]
     #loop over metabolites
     for j = 1:p.M
-      dx[i] +=  x[i] * x[p.N + j] * p.u[i,j] * (1-p.l_sum[j]) # u_ij * (1-l_j)
+      dx[p.M + i] +=  x[p.M + i] * x[j] * p.u[i,j] * (1 - p.l_sum[j]) # u_ij * (1-l_j)
     end
   end
 
- #loop over metabolites j = 1 : M
+ #loop over metabolites j = 1:M
   for j = 1:p.M
-    dx[p.N + j] = p.ρ[j] - (p.ω[j] * x[p.N + j]) #inflow
+    dx[j] = p.ρ[j] - x[j] * p.ω[j]#inflow
     #loop over species
     for i = 1:p.N
-      dx[p.N + j] += -p.u[i,j] * x[i] * x[p.N + j] #minus uptake
+      dx[j] += -p.u[i,j] * x[p.M+ i] * x[j] #minus uptake
       #loop over other metabolites
       for k = 1:p.M
-        dx[p.N + j] += p.u[i,k] * x[i] * x[p.N + k] * p.l[k,j] # +leakage
+        dx[j] += p.u[i,k] * x[p.M + i] * x[k] * p.l[k,j] # +leakage
       end
     end
   end
+
+  # dx[(x .+ dx) .< 0] .= -x[(x .+ dx) .< 0]
 end

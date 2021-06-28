@@ -28,7 +28,7 @@ end
 """
     make_parameters(N::Int64, M::Int64, u::Array{Float64,2}, Rm::Vector{Float64}, l::Array{Float64,2}, ρ::Vector{Float64}, ω::Array{Float64,1})
 
-Helper function used internally. Takes values for parameters and returns a `Parameters`
+Helper function that takes values for parameters and returns a `Parameters`
 object. Also does checks internally to make sure the values are correct.
 """
 function make_parameters(N::Int64, M::Int64,
@@ -50,7 +50,9 @@ end
 
 
 """
+make_parameters(N::Int64, M::Int64, u::Array{Float64,2}, Rm::Vector{Float64}, l::Array{Float64,2}, ρ::Vector{Float64})
 
+creates parameters with ω = 0 for all resources
 """
 function make_parameters(N::Int64, M::Int64,
         u::Array{Float64,2}, Rm::Vector{Float64},
@@ -66,5 +68,5 @@ function make_parameters(N::Int64, M::Int64,
     #assert that the leakage proportions add up to 1
     @assert all(sum(l,dims = 2) .<= 1) "One or more l values are > 1"
 
-    return( Parameters(copy(N), copy(M), copy(u), copy(Rm), copy(l), sum(copy(l), dims=2)[:], copy(ρ)))
+    return( Parameters(copy(N), copy(M), copy(u), copy(Rm), copy(l), sum(copy(l), dims=2)[:], copy(ρ), zeros(M)))
 end
